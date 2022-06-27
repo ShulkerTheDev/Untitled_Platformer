@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
     
     [SerializeField] float playerSpd = 10f;
     [SerializeField] float jumpSpd = 5f;
+    [SerializeField] float wallSlidingSpd = 3f;
+    [SerializeField] float wallJumpSpd =2f;
 
     Vector2 moveInput;
     Rigidbody2D playerBody;
@@ -29,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
         Movement();
         FlipSprite();
         Falling();
+        WallSliding();
     }
 
     void OnMove(InputValue value)
@@ -46,23 +49,30 @@ public class PlayerMovement : MonoBehaviour
         return;
       }
 
-      if(value.isPressed)
+      if(value.isPressed && playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         playerBody.velocity += new Vector2(0f, jumpSpd);
 
         playerAnimator.SetBool("isJumping", true);
+        playerAnimator.SetBool("isRunning", false);
       }
+
+      Debug.Log("Jump");
     }
 
     void Movement()
     {
-      //Controls player movement
-      Vector2 playerVelocity = new Vector2 (moveInput.x * playerSpd, playerBody.velocity.y);
-      playerBody.velocity = playerVelocity;
+      if (!playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
+      {
+        //Controls player movement
+        Vector2 playerVelocity = new Vector2 (moveInput.x * playerSpd, playerBody.velocity.y);
+        playerBody.velocity = playerVelocity;
 
-      bool playerRunning = Mathf.Abs(playerBody.velocity.x) > Mathf.Epsilon;
+        bool playerRunning = Mathf.Abs(playerBody.velocity.x) > Mathf.Epsilon;
 
-      playerAnimator.SetBool("isRunning", playerRunning);
+        playerAnimator.SetBool("isRunning", playerRunning);
+      }
+
     }
 
     void FlipSprite()
@@ -82,10 +92,30 @@ public class PlayerMovement : MonoBehaviour
       {
         playerAnimator.SetBool("isFalling", true);
         playerAnimator.SetBool("isJumping", false);
+        playerAnimator.SetBool("isRunning", false);
       }
       else
       {
         playerAnimator.SetBool("isFalling", false);
       }
+    }
+
+    void WallSliding()
+    {
+      //Detects if player is wall sliding
+      if(!playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
+      {
+        playerAnimator.SetBool("isWallSliding", false);
+      }
+      
+      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && !playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      {
+        playerBody.velocity = new Vector2(playerBody.velocity.x, Mathf.Clamp(playerBody.velocity.y, -wallSlidingSpd, float.MaxValue));
+
+        playerAnimator.SetBool("isWallSliding", true);
+        playerAnimator.SetBool("isJumping", false);
+        playerAnimator.SetBool("isRunning", false);
+      }
+      
     }
 }
