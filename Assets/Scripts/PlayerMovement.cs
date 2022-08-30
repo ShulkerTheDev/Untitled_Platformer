@@ -8,13 +8,14 @@ public class PlayerMovement : MonoBehaviour
     
     [SerializeField] float playerSpd = 10f;
     [SerializeField] float jumpSpd = 5f;
-    [SerializeField] float wallSlidingSpd = 3f;
+    [SerializeField] float wallSlidingSpd = -0.001f;
     [SerializeField] float wallJumpSpd =2f;
 
     Vector2 moveInput;
     Rigidbody2D playerBody;
     Animator playerAnimator;
     CapsuleCollider2D playerCollider;
+    BoxCollider2D playerFeetCollider;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
       playerBody = GetComponent<Rigidbody2D>();   
       playerAnimator = GetComponent<Animator>();
       playerCollider = GetComponent<CapsuleCollider2D>();
+      playerFeetCollider = GetComponent<BoxCollider2D>();
     }
 
     // Update is called once per frame
@@ -43,26 +45,40 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump(InputValue value)
     {
+      bool playerWallSliding = playerAnimator.GetBool("isWallSliding");
+
       //Leaves method if player is not touching a layer labeled "Ground"
-      if(!playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && !playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
       {
-        return;
+        Debug.Log("Leaving OnJump");
+        return; 
       }
 
-      if(value.isPressed && playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      if(value.isPressed && playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         playerBody.velocity += new Vector2(0f, jumpSpd);
 
         playerAnimator.SetBool("isJumping", true);
         playerAnimator.SetBool("isRunning", false);
+        Debug.Log("Jump");
       }
 
-      Debug.Log("Jump");
+      if(value.isPressed && playerWallSliding == true)
+      {
+        playerBody.velocity += new Vector2(0f, wallJumpSpd);
+        Debug.Log("WALL JUMP");
+
+        playerAnimator.SetBool("isJumping", true);
+        playerAnimator.SetBool("isWallSliding", false);
+      }
+
     }
 
     void Movement()
     {
-      if (!playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
+      bool playerJumping = playerAnimator.GetBool("isJumping");
+
+      if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         //Controls player movement
         Vector2 playerVelocity = new Vector2 (moveInput.x * playerSpd, playerBody.velocity.y);
@@ -71,6 +87,13 @@ public class PlayerMovement : MonoBehaviour
         bool playerRunning = Mathf.Abs(playerBody.velocity.x) > Mathf.Epsilon;
 
         playerAnimator.SetBool("isRunning", playerRunning);
+      }
+
+      if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && playerJumping == true)
+      {
+        //Controls player movement
+        Vector2 playerVelocity = new Vector2 (moveInput.x * jumpSpd, playerBody.velocity.y);
+        playerBody.velocity = playerVelocity;
       }
 
     }
@@ -88,11 +111,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Falling()
     { //Detect if player is falling
-      if (playerBody.velocity.y < -0.1)
+      if (playerBody.velocity.y < -0.1 && playerAnimator.GetBool("isWallSliding") == false)
       {
         playerAnimator.SetBool("isFalling", true);
         playerAnimator.SetBool("isJumping", false);
         playerAnimator.SetBool("isRunning", false);
+        playerAnimator.SetBool("isWallSliding", false);
       }
       else
       {
@@ -103,18 +127,19 @@ public class PlayerMovement : MonoBehaviour
     void WallSliding()
     {
       //Detects if player is wall sliding
-      if(!playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
+      if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && !playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
-        playerAnimator.SetBool("isWallSliding", false);
-      }
-      
-      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) && !playerCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
-      {
-        playerBody.velocity = new Vector2(playerBody.velocity.x, Mathf.Clamp(playerBody.velocity.y, -wallSlidingSpd, float.MaxValue));
+        Debug.Log("ON WALL");
+        playerBody.velocity += new Vector2(0f, wallSlidingSpd);
 
         playerAnimator.SetBool("isWallSliding", true);
         playerAnimator.SetBool("isJumping", false);
         playerAnimator.SetBool("isRunning", false);
+        playerAnimator.SetBool("isFalling", false);
+      }
+      else
+      {
+        playerAnimator.SetBool("isWallSliding", false);
       }
       
     }
