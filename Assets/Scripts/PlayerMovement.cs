@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     
     [SerializeField] float playerSpd = 10f;
     [SerializeField] float jumpSpd = 5f;
-    [SerializeField] float wallSlidingSpd = -0.001f;
+    [SerializeField] float wallSlidingSpd = 0f;
     [SerializeField] float wallJumpSpd =2f;
 
     Vector2 moveInput;
@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     Animator playerAnimator;
     CapsuleCollider2D playerCollider;
     BoxCollider2D playerFeetCollider;
+    SpriteRenderer playerSprite;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
       playerAnimator = GetComponent<Animator>();
       playerCollider = GetComponent<CapsuleCollider2D>();
       playerFeetCollider = GetComponent<BoxCollider2D>();
+      playerSprite = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -65,7 +67,7 @@ public class PlayerMovement : MonoBehaviour
 
       if(value.isPressed && playerWallSliding == true)
       {
-        playerBody.velocity += new Vector2(0f, wallJumpSpd);
+        playerBody.velocity += new Vector2(0f, -wallSlidingSpd);
         Debug.Log("WALL JUMP");
 
         playerAnimator.SetBool("isJumping", true);
@@ -76,8 +78,6 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-      bool playerJumping = playerAnimator.GetBool("isJumping");
-
       if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         //Controls player movement
@@ -89,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool("isRunning", playerRunning);
       }
 
-      if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && playerJumping == true)
+      if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && playerAnimator.GetBool("isJumping") == true)
       {
         //Controls player movement
         Vector2 playerVelocity = new Vector2 (moveInput.x * jumpSpd, playerBody.velocity.y);
@@ -131,6 +131,8 @@ public class PlayerMovement : MonoBehaviour
       {
         Debug.Log("ON WALL");
         playerBody.velocity += new Vector2(0f, wallSlidingSpd);
+
+        playerSprite.flipX = true;
 
         playerAnimator.SetBool("isWallSliding", true);
         playerAnimator.SetBool("isJumping", false);
