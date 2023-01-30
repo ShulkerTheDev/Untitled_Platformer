@@ -36902,50 +36902,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &816407028 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4075358388074921050, guid: 3b1a7cad33e4aae419701e0fc97272b7, type: 3}
-  m_PrefabInstance: {fileID: 6368677407242227365}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &816407029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 816407028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbfdee98a3912b846a0cadb2ca5f777a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 1
---- !u!61 &816407035
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 816407028}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0.3990116, y: -0.39431715}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0.03125, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.051761627, y: 0.6807909}
-  m_EdgeRadius: 0
 --- !u!1 &1194372316
 GameObject:
   m_ObjectHideFlags: 0
@@ -40329,6 +40285,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 2312996347099605998, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}
+      propertyPath: m_Size.x
+      value: 0.71783257
+      objectReference: {fileID: 0}
+    - target: {fileID: 2312996347099605998, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.18880367
+      objectReference: {fileID: 0}
     - target: {fileID: 3242063163979386031, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}
       propertyPath: m_Material
       value: 
@@ -40349,10 +40313,6 @@ PrefabInstance:
     - target: {fileID: 4075358388074921050, guid: 3b1a7cad33e4aae419701e0fc97272b7, type: 3}
       propertyPath: m_Name
       value: Goober(Enemy)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4075358388074921050, guid: 3b1a7cad33e4aae419701e0fc97272b7, type: 3}
-      propertyPath: m_Layer
-      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8522084232629156937, guid: 3b1a7cad33e4aae419701e0fc97272b7, type: 3}
       propertyPath: m_RootOrder
