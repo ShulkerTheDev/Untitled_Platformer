@@ -36,6 +36,7 @@ public class PlayerMovement : MonoBehaviour
         FlipSprite();
         Falling();
         WallSliding();
+        TakeDmg();
     }
 
     void OnMove(InputValue value)
@@ -144,5 +145,19 @@ public class PlayerMovement : MonoBehaviour
         playerAnimator.SetBool("isWallSliding", false);
       }
       
+    }
+
+    void TakeDmg()
+    {
+       if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")))
+       {
+          playerAnimator.SetBool("isHit", true);
+          
+       }
+       else
+       {
+          playerAnimator.SetBool("isHit", false);
+       }
+       
     }
 }

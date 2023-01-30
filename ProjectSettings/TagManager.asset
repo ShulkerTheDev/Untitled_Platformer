@@ -14,7 +14,7 @@ TagManager:
   - Wall
   - Player
   - Background
-  - 
+  - Enemies
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Wall
     uniqueID: 2102814151
+    locked: 0
+  - name: Enemies
+    uniqueID: 569795365
     locked: 0
   - name: Player
     uniqueID: 741392031
