@@ -7,15 +7,18 @@ public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] float playerHealth = 1000f;
     [SerializeField] float hitDelay = 5f;
+    [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
 
     Animator playerAnimator;
     CapsuleCollider2D playerCollider;
+    Rigidbody2D playerBody;
 
     // Start is called before the first frame update
     void Start()
     {
       playerAnimator = GetComponent<Animator>();
       playerCollider = GetComponent<CapsuleCollider2D>();
+      playerBody = GetComponent<Rigidbody2D>();   
     }
 
     // Update is called once per frame
@@ -52,7 +55,10 @@ public class PlayerCombat : MonoBehaviour
 
       if (playerHealth <= 0)
       {
-        SceneManager.LoadScene(2);
+        playerAnimator.SetBool("isDying", true);
+        playerBody.velocity = deathKick;
+
+        //SceneManager.LoadScene(2);
       }
     }
 }

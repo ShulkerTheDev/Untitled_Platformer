@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3409088766462282780}
   - component: {fileID: -9068752649313928501}
   - component: {fileID: 3242063163979386031}
+  - component: {fileID: 1555453675}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 1514163704322512775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.0267, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -94,7 +95,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 741392031
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 3204480812468917802, guid: 7a7cb689836b32540847458fd8074b25, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -121,9 +122,9 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.5
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 98f3d8770e1c95645be974106d281060, type: 2}
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -141,8 +142,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.18079418, y: -0.04047823}
-  m_Size: {x: 0.64841163, y: 1.2190428}
+  m_Offset: {x: -0.18880367, y: -0.04047823}
+  m_Size: {x: 0.7756715, y: 1.2840446}
   m_Direction: 0
 --- !u!114 &3409088766462282780
 MonoBehaviour:
@@ -188,8 +189,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerSpd: 10
   jumpSpd: 5
-  wallSlidingSpd: 3
-  wallJumpSpd: 2
+  wallSlidingSpd: -0.18
+  wallJumpSpd: 4
 --- !u!61 &3242063163979386031
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -199,8 +200,8 @@ BoxCollider2D:
   m_GameObject: {fileID: 1514163704322512775}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_Material: {fileID: 6200000, guid: 98f3d8770e1c95645be974106d281060, type: 2}
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.17043781, y: -0.58491266}
@@ -216,3 +217,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7151928, y: 0.16350818}
   m_EdgeRadius: 0
+--- !u!114 &1555453675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514163704322512775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8aec72aba99804e9c3563b87c21324, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: 500
+  hitDelay: 25
+  deathKick: {x: 10, y: 10}
