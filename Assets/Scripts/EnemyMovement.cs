@@ -6,12 +6,12 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 1f;
     Rigidbody2D myRigidbody;
-    BoxCollider2D turnBoxCollider;
+    CapsuleCollider2D turncapsuleCollider;
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        turnBoxCollider = GetComponent<BoxCollider2D>();
+        turncapsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
@@ -19,7 +19,7 @@ public class EnemyMovement : MonoBehaviour
     {
         myRigidbody.velocity = new Vector2(moveSpeed, 0f);
         
-        if(turnBoxCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
+        if(turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
         {
           FlipEnemyFacing();
         }

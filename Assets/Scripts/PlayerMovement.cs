@@ -14,19 +14,21 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D playerBody;
     Animator playerAnimator;
-    CapsuleCollider2D playerCollider;
-    BoxCollider2D playerFeetCollider;
+    CapsuleCollider2D playerFeetCollider;
+    BoxCollider2D playerCollider;
     SpriteRenderer playerSprite;
+    PlayerInputSystem playerInput;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-      //Retrieves rigidbody2d component
+      //Retrieves Components
       playerBody = GetComponent<Rigidbody2D>();   
       playerAnimator = GetComponent<Animator>();
-      playerCollider = GetComponent<CapsuleCollider2D>();
-      playerFeetCollider = GetComponent<BoxCollider2D>();
+      playerCollider = GetComponent<BoxCollider2D>();
+      playerFeetCollider = GetComponent<CapsuleCollider2D>();
       playerSprite = GetComponent<SpriteRenderer>();
+      playerInput = new PlayerInputSystem();
     }
 
     // Update is called once per frame
@@ -38,14 +40,7 @@ public class PlayerMovement : MonoBehaviour
         WallSliding();
     }
 
-    void OnMove(InputValue value)
-    {
-      //Takes the vector value of the player input when OnMove is called in unity
-      moveInput = value.Get<Vector2>();
-      Debug.Log(moveInput);
-    }
-
-    void OnJump(InputValue value)
+    public void Jump()
     {
       bool playerWallSliding = playerAnimator.GetBool("isWallSliding");
 
@@ -56,7 +51,7 @@ public class PlayerMovement : MonoBehaviour
         return; 
       }
 
-      if(value.isPressed && playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         playerBody.velocity += new Vector2(0f, jumpSpd);
 
@@ -65,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("Jump");
       }
 
-      if(value.isPressed && playerWallSliding == true)
+      if(playerWallSliding == true)
       {
         playerBody.velocity += new Vector2(0f, -wallSlidingSpd);
         Debug.Log("WALL JUMP");
@@ -76,8 +71,11 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void Movement()
+    public void Movement()
     {
+      moveInput = playerInput.Player_Input.Movement.ReadValue<Vector2>();
+      Debug.Log(moveInput);
+
       if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         //Controls player movement
@@ -143,6 +141,17 @@ public class PlayerMovement : MonoBehaviour
       {
         playerAnimator.SetBool("isWallSliding", false);
       }
+
       
+    }
+
+    private void OnEnable() 
+    {
+      playerInput.Player_Input.Enable(); 
+    }
+
+    private void OnDisable()
+    {
+      playerInput.Player_Input.Disable();
     }
 }

@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] float playerHealth = 1000f;
     [SerializeField] float hitDelay = 5f;
-    [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
+    [SerializeField] Vector2 deathKick = new Vector2(0f, 2f);
 
     Animator playerAnimator;
-    CapsuleCollider2D playerCollider;
+    BoxCollider2D playerCollider;
     Rigidbody2D playerBody;
 
     // Start is called before the first frame update
     void Start()
     {
       playerAnimator = GetComponent<Animator>();
-      playerCollider = GetComponent<CapsuleCollider2D>();
+      playerCollider = GetComponent<BoxCollider2D>();
       playerBody = GetComponent<Rigidbody2D>();   
     }
 
@@ -56,9 +57,18 @@ public class PlayerCombat : MonoBehaviour
       if (playerHealth <= 0)
       {
         playerAnimator.SetBool("isDying", true);
-        playerBody.velocity = deathKick;
+        //playerBody.velocity = deathKick;
 
         //SceneManager.LoadScene(2);
       }
+    }
+
+    void OnAttack (InputValue value)
+    {
+      if(value.isPressed)
+      {
+        playerAnimator.SetBool("isAttacking", true);
+      }
+      
     }
 }
