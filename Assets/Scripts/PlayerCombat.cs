@@ -7,12 +7,17 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] float playerHealth = 1000f;
-    [SerializeField] float hitDelay = 5f;
+    [SerializeField] float hitDelay = 0.3f;
     [SerializeField] Vector2 deathKick = new Vector2(0f, 2f);
+    [SerializeField] float attackDuration = 0.30f;
 
     Animator playerAnimator;
     BoxCollider2D playerCollider;
     Rigidbody2D playerBody;
+
+    float attackTimer = 0f;
+    float invulerableTimer =  0f;
+    bool playerAttacking = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,19 +30,18 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TakeDmg();
-        HealthCheck();
+      TakeDmg();
+      HealthCheck();
+      AttackCheck();
     }
 
     void TakeDmg()
-    {
-      float lastHit =  0f;
-      float nextHit = 1f;
-      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")) && nextHit > lastHit)
+    { 
+      invulerableTimer += Time.deltaTime;
+      Debug.Log(invulerableTimer);
+      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")) && invulerableTimer > hitDelay)
       {
-        lastHit = Time.time;
-        nextHit = Time.time + hitDelay;
-
+        invulerableTimer = 0;
         playerAnimator.SetBool("isHit", true);
 
         playerHealth = playerHealth - 0.5f;
@@ -52,8 +56,6 @@ public class PlayerCombat : MonoBehaviour
 
     void HealthCheck()
     {
-      Debug.Log(playerHealth);
-
       if (playerHealth <= 0)
       {
         playerAnimator.SetBool("isDying", true);
@@ -63,12 +65,23 @@ public class PlayerCombat : MonoBehaviour
       }
     }
 
-    void OnAttack (InputValue value)
+    public void  LightAttack ()
     {
-      if(value.isPressed)
-      {
         playerAnimator.SetBool("isAttacking", true);
+    }
+
+    void AttackCheck()
+    {
+      playerAttacking = playerAnimator.GetBool("isAttacking");
+      if(playerAttacking == true)
+      {        
+        attackTimer += Time.deltaTime;
+
+        if (attackTimer > attackDuration)
+        {
+          attackTimer = 0;
+          playerAnimator.SetBool("isAttacking", false);
+        }
       }
-      
     }
 }

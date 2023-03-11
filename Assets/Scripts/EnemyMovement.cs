@@ -19,7 +19,7 @@ public class EnemyMovement : MonoBehaviour
     {
         myRigidbody.velocity = new Vector2(moveSpeed, 0f);
         
-        if(turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
+        if(turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) || turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
           FlipEnemyFacing();
         }

@@ -74,7 +74,6 @@ public class PlayerMovement : MonoBehaviour
     public void Movement()
     {
       moveInput = playerInput.Player_Input.Movement.ReadValue<Vector2>();
-      Debug.Log(moveInput);
 
       if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
