@@ -199,6 +199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c8c23a1c6ff6b045ab6d4f1cec5c0fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyHealth: 100
-  hitDelay: 0.2
+  enemyHealth: 60
+  hitDelay: 0.1
   knockBack: {x: 0, y: 3}
