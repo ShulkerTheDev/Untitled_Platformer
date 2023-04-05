@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float playerSpd = 10f;
     [SerializeField] float jumpSpd = 5f;
     [SerializeField] float wallSlidingSpd = 0f;
-    [SerializeField] float wallJumpSpd =2f;
+    //[SerializeField] float wallJumpSpd =2f;
 
     Vector2 moveInput;
     Rigidbody2D playerBody;
@@ -144,6 +144,7 @@ public class PlayerMovement : MonoBehaviour
       
     }
 
+    //Enable player input
     private void OnEnable() 
     {
       playerInput.Player_Input.Enable(); 
