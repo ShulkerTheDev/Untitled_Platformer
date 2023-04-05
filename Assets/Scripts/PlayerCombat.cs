@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
           enemyCombat.TakeDmg(attackDmg);
 
           // Calculate knockback force direction
-          Vector3 knockbackDirection = other.transform.position - transform.position;
+          Vector3 knockbackDirection = other.transform.position - gameObject.transform.position;
           knockbackDirection.Normalize();
 
           if (enemyRigidBody != null)
