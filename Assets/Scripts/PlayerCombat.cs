@@ -12,14 +12,16 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float attackDuration = 0.30f;
     [SerializeField] float attackDmg = 10f;
     [SerializeField] float knockbackForce = 10f;
+    [SerializeField] float attackTimer = 0f;
+    [SerializeField] float invulerableTimer =  0f;
+    [SerializeField] float HazardDmg = 0.5f;
+
 
     Animator playerAnimator;
     BoxCollider2D playerCollider;
     Rigidbody2D playerBody;
     CircleCollider2D attackCollider;
 
-    float attackTimer = 0f;
-    float invulerableTimer =  0f;
     bool playerAttacking = false;
 
     // Start is called before the first frame update
@@ -34,22 +36,22 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      TakeDmg();
       HealthCheck();
       AttackCheck();
+      HazardCollideCheck();
     }
 
     //Checks when last player was hit, deals dmg and allows a delay inbetween
-    void TakeDmg()
+    public void TakeDmg(float damage)
     { 
       invulerableTimer += Time.deltaTime;
 
-      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")) && invulerableTimer > hitDelay)
+      if(invulerableTimer > hitDelay)
       {
         invulerableTimer = 0;
         playerAnimator.SetBool("isHit", true);
 
-        playerHealth = playerHealth - 0.5f;
+        playerHealth = playerHealth - damage;
         
       }
       else
@@ -57,6 +59,14 @@ public class PlayerCombat : MonoBehaviour
         playerAnimator.SetBool("isHit", false);
       }
       
+    }
+
+    void HazardCollideCheck ()
+    {
+      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Hazards")))
+      {
+        TakeDmg(HazardDmg);
+      }
     }
 
     //Checks to see if player health is 0 
