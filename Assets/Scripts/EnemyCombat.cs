@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,7 @@ public class EnemyCombat : MonoBehaviour
     void Update()
     {
       HealthCheck();
+      AttackCheck();
     }
 
     //Checks when last enemy was hit, deals dmg and allows a delay inbetween
@@ -70,16 +72,15 @@ public class EnemyCombat : MonoBehaviour
       //Calculated distance between player and enemy
       Vector2 distanceToPlayer = playerLocation.position - transform.position;
       distanceToPlayer.y = 0f;
-      distanceToPlayer.Normalize();
-
-      // Calculate the dot product between the enemy's forward direction and the direction to the player
-      float dotProduct = Vector2.Dot(transform.forward, distanceToPlayer);
+      distanceToPlayer.x = Math.Abs(distanceToPlayer.x);
+      attackTimer = Time.time;
+  
 
       // If the player is infront of player and within the attack range and delay time has passed since the last attack
-      if (dotProduct > 0.5f && distanceToPlayer.magnitude <= attackRange && Time.time - lastAttackTime >= attackDelay)
+      if (distanceToPlayer.magnitude <= attackRange && (attackTimer - lastAttackTime) >= attackDelay)
       {
           // Set the IsAttacking parameter to true to play the attack animation
-          enemyAnimator.SetBool("IsAttacking", true);
+          enemyAnimator.SetBool("isAttacking", true);
 
           // Attack the player
           playerObject.GetComponent<PlayerCombat>().TakeDmg(attackDmg);
@@ -90,7 +91,7 @@ public class EnemyCombat : MonoBehaviour
       else
       {
           // Set the IsAttacking parameter to false to stop the attack animation
-          enemyAnimator.SetBool("IsAttacking", false);
+          enemyAnimator.SetBool("isAttacking", false);
       }
     }
 }

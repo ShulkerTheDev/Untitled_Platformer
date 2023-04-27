@@ -20,7 +20,7 @@ GameObject:
   - component: {fileID: 1501325040}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -209,6 +209,9 @@ MonoBehaviour:
   attackDuration: 0.3
   attackDmg: 50
   knockbackForce: 100
+  attackTimer: 0
+  invulerableTimer: 0
+  HazardDmg: 0.5
 --- !u!114 &1126418047
 MonoBehaviour:
   m_ObjectHideFlags: 0

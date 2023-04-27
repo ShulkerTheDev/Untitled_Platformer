@@ -5,31 +5,35 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 1f;
+
     Rigidbody2D myRigidbody;
     CapsuleCollider2D turncapsuleCollider;
+    Animator enemyAnimator;
+
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         turncapsuleCollider = GetComponent<CapsuleCollider2D>();
+        enemyAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        myRigidbody.velocity = new Vector2(moveSpeed, 0f);
-        
-        if(turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) || turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
-        {
-          FlipEnemyFacing();
-        }
-        
-    }
+      bool enemyAttacking = enemyAttacking = enemyAnimator.GetBool("isAttacking");
 
-    void OnTriggerExit2D(Collider2D other) 
-    {
+      if(enemyAttacking == false)
+      {
+        myRigidbody.velocity = new Vector2(moveSpeed, 0f);
+      }    
+      
+      if(turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) || turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      {
         moveSpeed = -moveSpeed;
         FlipEnemyFacing();
+      }
+        
     }
 
     void FlipEnemyFacing()
