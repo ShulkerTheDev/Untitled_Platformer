@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    //Serialized field so values can be chaned in editor to see what feels/flows better
+    //Serialized field so values can be changed in editor to see what feels/flows better
     [SerializeField] float moveSpeed = 1f;
 
     bool enemyAttacking;

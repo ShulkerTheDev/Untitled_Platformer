@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    //Serialized field so values can be chaned in editor to see what feels/flows better
+    //Serialized field so values can be changed in editor to see what feels/flows better
     [SerializeField] float enemyHealth = 100f;
     [SerializeField] float hitDelay = 0.3f;
     [SerializeField] Vector2 knockBack = new Vector2(0f, 1f);
