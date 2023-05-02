@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    
+    //Serialized field so values can be chaned in editor to see what feels/flows better
     [SerializeField] float playerSpd = 10f;
     [SerializeField] float jumpSpd = 5f;
     [SerializeField] float wallSlidingSpd = 0f;
@@ -44,13 +44,14 @@ public class PlayerMovement : MonoBehaviour
     {
       bool playerWallSliding = playerAnimator.GetBool("isWallSliding");
 
-      //Leaves method if player is not touching a layer labeled "Ground"
+      //Leaves method if player is not touching a layer labeled "Ground", if they aren't touching the ground player can't jump
       if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && !playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
       {
         Debug.Log("Leaving OnJump");
         return; 
       }
 
+      //Cheeks if collider for player's feet is touching the ground
       if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         playerBody.velocity += new Vector2(0f, jumpSpd);

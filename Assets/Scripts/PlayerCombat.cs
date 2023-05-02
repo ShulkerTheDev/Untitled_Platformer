@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerCombat : MonoBehaviour
 {
+    //Serialized field so values can be chaned in editor to see what feels/flows better
     [SerializeField] float playerHealth = 100f;
     [SerializeField] float hitDelay = 0.3f;
     [SerializeField] Vector2 deathKick = new Vector2(0f, 2f);
@@ -61,6 +62,7 @@ public class PlayerCombat : MonoBehaviour
       
     }
 
+    //Checks if player has collided with with any object marked as a hazard and deals damage
     void HazardCollideCheck ()
     {
       if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Hazards")))
@@ -81,6 +83,7 @@ public class PlayerCombat : MonoBehaviour
       }
     }
 
+    //Attack method set to a button in the input system
     public void  LightAttack ()
     {
         playerAnimator.SetBool("isAttacking", true);
@@ -102,6 +105,7 @@ public class PlayerCombat : MonoBehaviour
       }
     }
 
+    //Triggers when something enters a collider marked as trigger
     public void OnTriggerEnter2D (Collider2D other)
     {
       if ((playerAttacking == true) && (other.tag == "Attackable"))

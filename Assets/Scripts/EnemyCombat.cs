@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
+    //Serialized field so values can be chaned in editor to see what feels/flows better
     [SerializeField] float enemyHealth = 100f;
     [SerializeField] float hitDelay = 0.3f;
     [SerializeField] Vector2 knockBack = new Vector2(0f, 1f);
@@ -37,13 +38,14 @@ public class EnemyCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      //Checks if the enemy is attacking
       enemyAttacking = enemyAnimator.GetBool("isAttacking");
 
       HealthCheck();
       AttackCheck();
     }
 
-    //Checks when last enemy was hit, deals dmg and allows a delay inbetween
+    //Checks when the last time the enemy was hit, and deals damage if enough time has passed since the delay
     public void TakeDmg(float damage)
     { 
       invulerableTimer += Time.deltaTime;
@@ -71,6 +73,7 @@ public class EnemyCombat : MonoBehaviour
       }
     }
 
+    //Checks when last the enemy attacked and attacks if the time passed is more than the delay
     void AttackCheck ()
     {
       playerLocation = playerObject.transform;
@@ -90,8 +93,8 @@ public class EnemyCombat : MonoBehaviour
       float frontDistanceToPlayer = Vector2.Dot(transform.right, directionToPlayer.normalized);
   
 
-      // If the player is infront of player and within the attack range and delay time has passed since the last attack
-      if (distanceToPlayer <= attackRange && (attackTimer - lastAttackTime) >= attackDelay)
+      // If the player is infront of enemy and within the attack range and delay time has passed since the last attack
+      if (distanceToPlayer <= attackRange && frontDistanceToPlayer <= attackRange && (attackTimer - lastAttackTime) >= attackDelay)
       {
           // Set the IsAttacking parameter to true to play the attack animation
           enemyAnimator.SetBool("isAttacking", true);
@@ -109,14 +112,16 @@ public class EnemyCombat : MonoBehaviour
       }
     }
 
+    //Triggers when something enters a collider marked as trigger
     public void OnTriggerEnter2D (Collider2D other)
     {
       if ((enemyAttacking == true) && (other.tag == "Player"))
       {
-        //Retrieves the EnemyCombat script attached to an enemy
+        //Retrieves the PlayerCombat script attached to an enemy
         PlayerCombat playerCombat = other.GetComponent<PlayerCombat>();
         Rigidbody2D playerRigidBody = other.GetComponent<Rigidbody2D>();
 
+        //Verifys that the PlayerCombat script is attached to the player
         if (playerCombat != null)
         {
           playerCombat.TakeDmg(attackDmg);
