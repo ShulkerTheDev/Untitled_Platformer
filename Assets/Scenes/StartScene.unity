@@ -71802,6 +71802,27 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1510304541 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4075358388074921050, guid: 3b1a7cad33e4aae419701e0fc97272b7, type: 3}
+  m_PrefabInstance: {fileID: 532985945}
+  m_PrefabAsset: {fileID: 0}
+--- !u!58 &1510304542
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1510304541}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.89041096
 --- !u!1 &2107139587
 GameObject:
   m_ObjectHideFlags: 0
@@ -71975,6 +71996,14 @@ PrefabInstance:
     - target: {fileID: 1514163704322512775, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242063163979386031, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3242063163979386031, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 1.3333334
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ce0c89cac76bb844a9635bbfbe71c0d, type: 3}

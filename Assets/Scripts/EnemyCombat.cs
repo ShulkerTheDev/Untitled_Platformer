@@ -12,9 +12,11 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] float attackDelay = 1f;
     [SerializeField] float attackRange = 2f;
     [SerializeField] float invulerableTimer =  0f;
-    [SerializeField] float attackDmg = 5f;
+    [SerializeField] float attackDmg = 10f;
+    [SerializeField] float knockbackForce = 10f;
 
     float lastAttackTime = 0f;
+    bool enemyAttacking = false;
     
     Animator enemyAnimator;
     BoxCollider2D enemyCollider;
@@ -22,6 +24,7 @@ public class EnemyCombat : MonoBehaviour
     GameObject playerObject;
     Transform playerLocation;
     PlayerCombat playerHealth;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +37,8 @@ public class EnemyCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+      enemyAttacking = enemyAnimator.GetBool("isAttacking");
+
       HealthCheck();
       AttackCheck();
     }
@@ -70,14 +75,23 @@ public class EnemyCombat : MonoBehaviour
     {
       playerLocation = playerObject.transform;
       //Calculated distance between player and enemy
-      Vector2 distanceToPlayer = playerLocation.position - transform.position;
-      distanceToPlayer.y = 0f;
-      distanceToPlayer.x = Math.Abs(distanceToPlayer.x);
+      Vector2 directionToPlayer = playerLocation.position - transform.position;
+
+      //Sets y axis to 0 as for now enemies only move left and right, so we don't need the y axis
+      directionToPlayer.y = 0f;
+
+      //Returns x axis as a positive value only
+      directionToPlayer.x = Math.Abs(directionToPlayer.x);
+
+      float  distanceToPlayer = directionToPlayer.magnitude;
+
       attackTimer = Time.time;
+
+      float frontDistanceToPlayer = Vector2.Dot(transform.right, directionToPlayer.normalized);
   
 
       // If the player is infront of player and within the attack range and delay time has passed since the last attack
-      if (distanceToPlayer.magnitude <= attackRange && (attackTimer - lastAttackTime) >= attackDelay)
+      if (distanceToPlayer <= attackRange && (attackTimer - lastAttackTime) >= attackDelay)
       {
           // Set the IsAttacking parameter to true to play the attack animation
           enemyAnimator.SetBool("isAttacking", true);
@@ -92,6 +106,31 @@ public class EnemyCombat : MonoBehaviour
       {
           // Set the IsAttacking parameter to false to stop the attack animation
           enemyAnimator.SetBool("isAttacking", false);
+      }
+    }
+
+    public void OnTriggerEnter2D (Collider2D other)
+    {
+      if ((enemyAttacking == true) && (other.tag == "Player"))
+      {
+        //Retrieves the EnemyCombat script attached to an enemy
+        PlayerCombat playerCombat = other.GetComponent<PlayerCombat>();
+        Rigidbody2D playerRigidBody = other.GetComponent<Rigidbody2D>();
+
+        if (playerCombat != null)
+        {
+          playerCombat.TakeDmg(attackDmg);
+
+          // Calculate knockback force direction
+          Vector3 knockbackDirection = other.transform.position - gameObject.transform.position;
+          knockbackDirection.Normalize();
+
+          if (playerRigidBody != null)
+          {
+            playerRigidBody.AddForce(knockbackDirection * knockbackForce);
+          }
+        }
+
       }
     }
 }

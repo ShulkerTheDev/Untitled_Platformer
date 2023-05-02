@@ -6,6 +6,8 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 1f;
 
+    bool enemyAttacking;
+
     Rigidbody2D myRigidbody;
     CapsuleCollider2D turncapsuleCollider;
     Animator enemyAnimator;
@@ -21,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      bool enemyAttacking = enemyAttacking = enemyAnimator.GetBool("isAttacking");
+      enemyAttacking = enemyAnimator.GetBool("isAttacking");
 
       if(enemyAttacking == false)
       {
