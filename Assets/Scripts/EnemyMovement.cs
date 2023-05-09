@@ -10,14 +10,16 @@ public class EnemyMovement : MonoBehaviour
     bool enemyAttacking;
 
     Rigidbody2D myRigidbody;
-    CapsuleCollider2D turncapsuleCollider;
+    CapsuleCollider2D turnCapsuleCollider;
+    BoxCollider2D boxCapsuleCollider;
     Animator enemyAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
-        turncapsuleCollider = GetComponent<CapsuleCollider2D>();
+        turnCapsuleCollider = GetComponent<CapsuleCollider2D>();
+        boxCapsuleCollider = GetComponent<BoxCollider2D>();
         enemyAnimator = GetComponent<Animator>();
     }
 
@@ -32,10 +34,11 @@ public class EnemyMovement : MonoBehaviour
       if(enemyAttacking == false)
       {
         myRigidbody.velocity = new Vector2(moveSpeed, 0f);
+        enemyAnimator.SetBool("isMoving", true);
       }    
       
-      //if enemy touches wall and is touching the ground turn around
-      if(turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) || turncapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      //if front of enemy touches wall or the ground turn around
+      if(turnCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Wall")) || turnCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         moveSpeed = -moveSpeed;
         FlipEnemyFacing();
