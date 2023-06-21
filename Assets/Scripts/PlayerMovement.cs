@@ -9,15 +9,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float playerSpd = 10f;
     [SerializeField] float jumpSpd = 5f;
     [SerializeField] float wallSlidingSpd = 0f;
+    [SerializeField] float fallDmg = 25f;
     //[SerializeField] float wallJumpSpd =2f;
 
     Vector2 moveInput;
+    Vector2 safeLocation;
     Rigidbody2D playerBody;
     Animator playerAnimator;
     CapsuleCollider2D playerFeetCollider;
     BoxCollider2D playerCollider;
     SpriteRenderer playerSprite;
     PlayerInputSystem playerInput;
+    PlayerCombat playerCombat;
 
     // Start is called before the first frame update
     void Awake()
@@ -29,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
       playerFeetCollider = GetComponent<CapsuleCollider2D>();
       playerSprite = GetComponent<SpriteRenderer>();
       playerInput = new PlayerInputSystem();
+      playerCombat = GetComponent<PlayerCombat>();
     }
 
     // Update is called once per frame
@@ -38,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
         FlipSprite();
         Falling();
         WallSliding();
+        UpdatePlayerSafeLocation();
     }
 
     public void Jump()
@@ -47,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
       //Leaves method if player is not touching a layer labeled "Ground", if they aren't touching the ground player can't jump
       if(!playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")) && !playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Wall")))
       {
-        Debug.Log("Leaving OnJump");
         return; 
       }
 
@@ -58,7 +62,6 @@ public class PlayerMovement : MonoBehaviour
 
         playerAnimator.SetBool("isJumping", true);
         playerAnimator.SetBool("isRunning", false);
-        Debug.Log("Jump");
       }
 
       if(playerWallSliding == true)
@@ -145,6 +148,16 @@ public class PlayerMovement : MonoBehaviour
       
     }
 
+    private void UpdatePlayerSafeLocation()
+    {
+      if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+      {
+        safeLocation = playerBody.transform.position;
+        Debug.Log(safeLocation);
+      }      
+
+    }
+
     //Enable player input
     private void OnEnable() 
     {
@@ -154,5 +167,23 @@ public class PlayerMovement : MonoBehaviour
     private void OnDisable()
     {
       playerInput.Player_Input.Disable();
+    }
+
+    private void TakeFallDmg()
+    {
+      playerCombat.currentPlayerHealth = playerCombat.currentPlayerHealth - fallDmg;
+    }
+
+    private void OnTriggerExit2D(Collider2D other) 
+    {
+       if (other.gameObject.name == "Tilemap Grid")
+       {
+          TakeFallDmg();
+
+          if(playerCombat.playerLives > 1 || playerCombat.currentPlayerHealth > 0)
+          {
+            playerBody.transform.position = safeLocation;
+          }
+       }
     }
 }

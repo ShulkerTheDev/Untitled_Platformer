@@ -7,7 +7,8 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     //Serialized field so values can be changed in editor to see what feels/flows better
-    [SerializeField] float playerHealth = 100f;
+    [SerializeField] public float currentPlayerHealth = 100f;
+    [SerializeField] public float maxPlayerHealth = 100f;
     [SerializeField] float hitDelay = 0.3f;
     [SerializeField] Vector2 deathKick = new Vector2(0f, 2f);
     [SerializeField] float attackDuration = 0.30f;
@@ -16,6 +17,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float attackTimer = 0f;
     [SerializeField] float invulerableTimer =  0f;
     [SerializeField] float HazardDmg = 0.5f;
+    [SerializeField] public int playerLives = 3;
 
 
     Animator playerAnimator;
@@ -52,7 +54,7 @@ public class PlayerCombat : MonoBehaviour
         invulerableTimer = 0;
         playerAnimator.SetBool("isHit", true);
 
-        playerHealth = playerHealth - damage;
+        currentPlayerHealth = currentPlayerHealth - damage;
         
       }
       else
@@ -74,12 +76,17 @@ public class PlayerCombat : MonoBehaviour
     //Checks to see if player health is 0 
     void HealthCheck()
     {
-      if (playerHealth <= 0)
+      if (currentPlayerHealth <= 0 & playerLives >= 1)
+      {
+        playerLives = playerLives - 1;
+        currentPlayerHealth = maxPlayerHealth;
+      }
+      else if (currentPlayerHealth <= 0 & playerLives < 1)
       {
         playerAnimator.SetBool("isDying", true);
         //playerBody.velocity = deathKick;
 
-        //SceneManager.LoadScene(2);
+        SceneManager.LoadScene(2);
       }
     }
 
