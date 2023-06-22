@@ -13,7 +13,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] float attackDelay = 1f;
     [SerializeField] float attackRange = 2f;
     [SerializeField] float invulerableTimer =  0f;
-    [SerializeField] float attackDmg = 10f;
+    [SerializeField] float attackDmg = 25f;
     [SerializeField] float knockbackForce = 10f;
 
     float lastAttackTime = 0f;
@@ -126,6 +126,8 @@ public class EnemyCombat : MonoBehaviour
         {
           playerCombat.TakeDmg(attackDmg);
 
+          Debug.Log("Enemy Attack");
+          
           // Calculate knockback force direction
           Vector3 knockbackDirection = other.transform.position - gameObject.transform.position;
           knockbackDirection.Normalize();

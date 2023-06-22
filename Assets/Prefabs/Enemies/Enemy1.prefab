@@ -208,7 +208,7 @@ MonoBehaviour:
   attackDelay: 1
   attackRange: 2
   invulerableTimer: 0
-  attackDmg: 5
+  attackDmg: 25
   knockbackForce: 10
 --- !u!58 &1510304542
 CircleCollider2D:

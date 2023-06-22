@@ -19,12 +19,12 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] float HazardDmg = 0.5f;
     [SerializeField] public int playerLives = 3;
 
+    public PlayerUi playerUi;
 
     Animator playerAnimator;
     BoxCollider2D playerCollider;
     Rigidbody2D playerBody;
     CircleCollider2D attackCollider;
-
     bool playerAttacking = false;
 
     // Start is called before the first frame update
@@ -34,6 +34,8 @@ public class PlayerCombat : MonoBehaviour
       playerCollider = GetComponent<BoxCollider2D>();
       playerBody = GetComponent<Rigidbody2D>();   
       attackCollider = GetComponent<CircleCollider2D>();
+      playerUi.SetMaxHealth(maxPlayerHealth);
+      playerUi.SetLivesCount(playerLives);
     }
 
     // Update is called once per frame
@@ -76,6 +78,9 @@ public class PlayerCombat : MonoBehaviour
     //Checks to see if player health is 0 
     void HealthCheck()
     {
+      playerUi.SetHealth(currentPlayerHealth);
+      playerUi.SetLivesCount(playerLives);
+
       if (currentPlayerHealth <= 0 & playerLives >= 1)
       {
         playerLives = playerLives - 1;

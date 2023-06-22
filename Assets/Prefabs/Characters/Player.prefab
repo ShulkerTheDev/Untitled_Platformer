@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 7861840692521042396}
   - component: {fileID: 1126418047}
   - component: {fileID: 1501325040}
+  - component: {fileID: 643618017}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -165,6 +166,7 @@ MonoBehaviour:
   playerSpd: 8
   jumpSpd: 3
   wallSlidingSpd: -0.18
+  fallDmg: 25
 --- !u!61 &3242063163979386031
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -203,8 +205,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb8aec72aba99804e9c3563b87c21324, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerHealth: 500
-  hitDelay: 0.3
+  currentPlayerHealth: 100
+  maxPlayerHealth: 100
+  hitDelay: 0.2
   deathKick: {x: 0, y: 2}
   attackDuration: 0.3
   attackDmg: 50
@@ -212,6 +215,8 @@ MonoBehaviour:
   attackTimer: 0
   invulerableTimer: 0
   HazardDmg: 0.5
+  playerLives: 3
+  playerUi: {fileID: 0}
 --- !u!114 &1126418047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +290,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 34b4eac9-4839-4332-96c3-e80627e8e008
     m_ActionName: Player_Input/Attacks[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 643618017}
+        m_TargetAssemblyTypeName: PlayerMenu, Assembly-CSharp
+        m_MethodName: PauseControl
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 29ea1f58-9445-4d39-9664-0ba9b91f3fa1
+    m_ActionName: Player_Input/Pause Menu[/Keyboard/enter]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player_Input
@@ -306,3 +327,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3161105
+--- !u!114 &643618017
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1514163704322512775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2651e220044a6fa41a02662971edc6f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasUi: {fileID: 0}
+  pauseText: {fileID: 0}

@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     BoxCollider2D playerCollider;
     SpriteRenderer playerSprite;
     PlayerInputSystem playerInput;
-    PlayerCombat playerCombat;
+    PlayerCombat playerCombatScript;
 
     // Start is called before the first frame update
     void Awake()
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
       playerFeetCollider = GetComponent<CapsuleCollider2D>();
       playerSprite = GetComponent<SpriteRenderer>();
       playerInput = new PlayerInputSystem();
-      playerCombat = GetComponent<PlayerCombat>();
+      playerCombatScript = GetComponent<PlayerCombat>();
     }
 
     // Update is called once per frame
@@ -153,7 +153,6 @@ public class PlayerMovement : MonoBehaviour
       if(playerFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
       {
         safeLocation = playerBody.transform.position;
-        Debug.Log(safeLocation);
       }      
 
     }
@@ -171,7 +170,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void TakeFallDmg()
     {
-      playerCombat.currentPlayerHealth = playerCombat.currentPlayerHealth - fallDmg;
+      playerCombatScript.currentPlayerHealth = playerCombatScript.currentPlayerHealth - fallDmg;
     }
 
     private void OnTriggerExit2D(Collider2D other) 
@@ -180,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
        {
           TakeFallDmg();
 
-          if(playerCombat.playerLives > 1 || playerCombat.currentPlayerHealth > 0)
+          if(playerCombatScript.playerLives > 1 || playerCombatScript.currentPlayerHealth > 0)
           {
             playerBody.transform.position = safeLocation;
           }
