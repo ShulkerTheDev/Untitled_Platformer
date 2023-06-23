@@ -8,6 +8,7 @@ public class PlayerMenu : MonoBehaviour
     public GameObject pauseText;
 
     bool gamePaused = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,29 +18,29 @@ public class PlayerMenu : MonoBehaviour
 
     public void PauseControl()
     {
-      if (gamePaused == true)
-      {
-        ResumeGame();
-        pauseText.SetActive(false);
-      }
-      else
-      {
-        PauseGame();
-        pauseText.SetActive(true);
-      }
+        if (gamePaused == true)
+        {
+            ResumeGame();
+            pauseText.SetActive(false);
+        }
+        else
+        {
+            PauseGame();
+            pauseText.SetActive(true);
+        }
     }
 
     public void PauseGame()
     {
-      Time.timeScale = 0;
+        Time.timeScale = 0;
 
-      gamePaused = true;
+        gamePaused = true;
     }
 
     public void ResumeGame()
     {
-      Time.timeScale = 1;
-      
-      gamePaused = false;
+        Time.timeScale = 1;
+
+        gamePaused = false;
     }
 }

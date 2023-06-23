@@ -11,18 +11,18 @@ public class PlayerUi : MonoBehaviour
     //Sets current value of health bar
     public void SetHealth(float health)
     {
-      healthSlider.value = health;
+        healthSlider.value = health;
     }
 
     //Sets max value of health bar
     public void SetMaxHealth(float maxHealth)
     {
-      healthSlider.maxValue = maxHealth;
+        healthSlider.maxValue = maxHealth;
     }
 
     public void SetLivesCount(int lifecount)
     {
-      string strCount = lifecount.ToString();
-      livesCount.text = strCount;
+        string strCount = lifecount.ToString();
+        livesCount.text = strCount;
     }
 }

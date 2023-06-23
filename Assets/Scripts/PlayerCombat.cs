@@ -7,19 +7,36 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     //Serialized field so values can be changed in editor to see what feels/flows better
-    [SerializeField] public float currentPlayerHealth = 100f;
-    [SerializeField] public float maxPlayerHealth = 100f;
-    [SerializeField] float hitDelay = 0.3f;
-    [SerializeField] Vector2 deathKick = new Vector2(0f, 2f);
-    [SerializeField] float attackDuration = 0.30f;
-    [SerializeField] float attackDmg = 10f;
-    [SerializeField] float knockbackForce = 10f;
-    [SerializeField] float attackTimer = 0f;
-    [SerializeField] float invulerableTimer =  0f;
-    [SerializeField] float HazardDmg = 0.5f;
-    [SerializeField] public int playerLives = 3;
+    [SerializeField]
+    public float currentPlayerHealth = 100f;
+
+    [SerializeField]
+    public float maxPlayerHealth = 100f;
+
+    [SerializeField]
+    float hitDelay = 0.3f;
+
+    [SerializeField]
+    Vector2 deathKick = new Vector2(0f, 2f);
+
+    [SerializeField]
+    float attackDuration = 0.30f;
+
+    [SerializeField]
+    float attackDmg = 10f;
+
+    [SerializeField]
+    float knockbackForce = 10f;
+
+    [SerializeField]
+    float HazardDmg = 0.5f;
+
+    [SerializeField]
+    public int playerLives = 3;
 
     public PlayerUi playerUi;
+    float invulerableTimer = 0f;
+    float attackTimer = 0f;
 
     Animator playerAnimator;
     BoxCollider2D playerCollider;
@@ -30,73 +47,74 @@ public class PlayerCombat : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-      playerAnimator = GetComponent<Animator>();
-      playerCollider = GetComponent<BoxCollider2D>();
-      playerBody = GetComponent<Rigidbody2D>();   
-      attackCollider = GetComponent<CircleCollider2D>();
-      playerUi.SetMaxHealth(maxPlayerHealth);
-      playerUi.SetLivesCount(playerLives);
+        playerAnimator = GetComponent<Animator>();
+        playerCollider = GetComponent<BoxCollider2D>();
+        playerBody = GetComponent<Rigidbody2D>();
+        attackCollider = GetComponent<CircleCollider2D>();
+        playerUi.SetMaxHealth(maxPlayerHealth);
+        playerUi.SetLivesCount(playerLives);
     }
 
     // Update is called once per frame
     void Update()
     {
-      HealthCheck();
-      AttackCheck();
-      HazardCollideCheck();
+        HealthCheck();
+        AttackCheck();
+        HazardCollideCheck();
     }
 
     //Checks when last player was hit, deals dmg and allows a delay inbetween
     public void TakeDmg(float damage)
-    { 
-      invulerableTimer += Time.deltaTime;
+    {
+        invulerableTimer += Time.deltaTime;
 
-      if(invulerableTimer > hitDelay)
-      {
-        invulerableTimer = 0;
-        playerAnimator.SetBool("isHit", true);
+        if (invulerableTimer > hitDelay)
+        {
+            invulerableTimer = 0;
+            playerAnimator.SetBool("isHit", true);
 
-        currentPlayerHealth = currentPlayerHealth - damage;
-        
-      }
-      else
-      {
-        playerAnimator.SetBool("isHit", false);
-      }
-      
+            currentPlayerHealth = currentPlayerHealth - damage;
+        }
+        else
+        {
+            playerAnimator.SetBool("isHit", false);
+        }
     }
 
     //Checks if player has collided with with any object marked as a hazard and deals damage
-    void HazardCollideCheck ()
+    void HazardCollideCheck()
     {
-      if(playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies")) || playerCollider.IsTouchingLayers(LayerMask.GetMask("Hazards")))
-      {
-        TakeDmg(HazardDmg);
-      }
+        bool isTouchingEnemy = playerCollider.IsTouchingLayers(LayerMask.GetMask("Enemies"));
+        bool isTouchingHazard = playerCollider.IsTouchingLayers(LayerMask.GetMask("Hazards"));
+
+        if (isTouchingEnemy | isTouchingHazard)
+        {
+            TakeDmg(HazardDmg);
+        }
     }
 
-    //Checks to see if player health is 0 
+    //Checks to see if player health is 0
     void HealthCheck()
     {
-      playerUi.SetHealth(currentPlayerHealth);
-      playerUi.SetLivesCount(playerLives);
+        playerUi.SetHealth(currentPlayerHealth);
+        playerUi.SetLivesCount(playerLives);
 
-      if (currentPlayerHealth <= 0 & playerLives >= 1)
-      {
-        playerLives = playerLives - 1;
-        currentPlayerHealth = maxPlayerHealth;
-      }
-      else if (currentPlayerHealth <= 0 & playerLives < 1)
-      {
-        playerAnimator.SetBool("isDying", true);
-        //playerBody.velocity = deathKick;
+        if (currentPlayerHealth <= 0 & playerLives >= 1)
+        {
+            playerLives = playerLives - 1;
+            currentPlayerHealth = maxPlayerHealth;
+        }
+        else if (currentPlayerHealth <= 0 & playerLives < 1)
+        {
+            playerAnimator.SetBool("isDying", true);
+            //playerBody.velocity = deathKick;
 
-        SceneManager.LoadScene(2);
-      }
+            SceneManager.LoadScene(2);
+        }
     }
 
     //Attack method set to a button in the input system
-    public void  LightAttack ()
+    public void LightAttack()
     {
         playerAnimator.SetBool("isAttacking", true);
     }
@@ -104,42 +122,42 @@ public class PlayerCombat : MonoBehaviour
     //Checks when the player last attacked and puts an delay inbetween attacks
     void AttackCheck()
     {
-      playerAttacking = playerAnimator.GetBool("isAttacking");
-      if(playerAttacking == true)
-      {        
-        attackTimer += Time.deltaTime;
-
-        if (attackTimer > attackDuration)
+        playerAttacking = playerAnimator.GetBool("isAttacking");
+        if (playerAttacking == true)
         {
-          attackTimer = 0;
-          playerAnimator.SetBool("isAttacking", false);
+            attackTimer += Time.deltaTime;
+
+            if (attackTimer > attackDuration)
+            {
+                attackTimer = 0;
+                playerAnimator.SetBool("isAttacking", false);
+            }
         }
-      }
     }
 
     //Triggers when something enters a collider marked as trigger
-    public void OnTriggerEnter2D (Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
-      if ((playerAttacking == true) && (other.tag == "Attackable"))
-      {
-        //Retrieves the EnemyCombat script attached to an enemy
-        EnemyCombat enemyCombat = other.GetComponent<EnemyCombat>();
-        Rigidbody2D enemyRigidBody = other.GetComponent<Rigidbody2D>();
-
-        if (enemyCombat != null)
+        if ((playerAttacking == true) & (other.tag == "Attackable"))
         {
-          enemyCombat.TakeDmg(attackDmg);
+            //Retrieves the EnemyCombat script attached to an enemy
+            EnemyCombat enemyCombat = other.GetComponent<EnemyCombat>();
+            Rigidbody2D enemyRigidBody = other.GetComponent<Rigidbody2D>();
 
-          // Calculate knockback force direction
-          Vector3 knockbackDirection = other.transform.position - gameObject.transform.position;
-          knockbackDirection.Normalize();
+            if (enemyCombat != null)
+            {
+                enemyCombat.TakeDmg(attackDmg);
 
-          if (enemyRigidBody != null)
-          {
-            enemyRigidBody.AddForce(knockbackDirection * knockbackForce);
-          }
+                // Calculate knockback force direction
+                Vector3 knockbackDirection =
+                    other.transform.position - gameObject.transform.position;
+                knockbackDirection.Normalize();
+
+                if (enemyRigidBody != null)
+                {
+                    enemyRigidBody.AddForce(knockbackDirection * knockbackForce);
+                }
+            }
         }
-
-      }
     }
 }
